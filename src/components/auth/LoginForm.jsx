@@ -1,8 +1,11 @@
 import Field from "../common/Field";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+
 const LoginForm = () => {
   const navigate = useNavigate();
+  const {setAuth} = useAuth();
 
   const {
     register,
@@ -12,7 +15,12 @@ const LoginForm = () => {
 
   const submitForm = (formData) => {
     console.log(formData);
-    navigate("/")
+    // Make an API Call
+    // Will Return Tokens and Logged in user information
+    
+    const user = {...formData};
+    setAuth({user});
+    navigate("/");
   }
 
   return (
@@ -24,7 +32,7 @@ const LoginForm = () => {
             <input
                 {...register("email", {required: "Email ID is Required"})}
                 className={`auth-input ${
-                    !!errors.email ? "border-red-500" : "border-gray-200"
+                    errors.email ? "border-red-500" : "border-gray-200"
                   }`}
                 type="email"
                 name="email"
@@ -42,7 +50,7 @@ const LoginForm = () => {
                 },
               })}
               className={`auth-input ${
-                !!errors.password ? "border-red-500" : "border-gray-200"
+                errors.password ? "border-red-500" : "border-gray-200"
               }`}
               type="password"
               name="password"
